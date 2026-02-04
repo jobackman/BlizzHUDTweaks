@@ -1,8 +1,7 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("BlizzHUDTweaks")
-local Options = addon:GetModule("Options")
 local Tooltip = addon:GetModule("Tooltip")
 
-local Original_GameTooltip_SetDefaultAnchor = GameTooltip_SetDefaultAnchor 
+local Original_GameTooltip_SetDefaultAnchor = GameTooltip_SetDefaultAnchor
 Tooltip.spellIdHookInstalled = false
 
 local function addSpellID(tooltip, spellID)
@@ -13,10 +12,10 @@ local function addSpellID(tooltip, spellID)
     tooltip:Show()
 end
 
-local function anchorTooltipToMouse()  
+local function anchorTooltipToMouse()
     GameTooltip_SetDefaultAnchor = function(tooltip, parent)
         tooltip:SetOwner(parent, "ANCHOR_CURSOR")
-    end   
+    end
 end
 
 local function showSpellID()
@@ -51,7 +50,7 @@ end
 
 function Tooltip:HideSpellID()
     if Tooltip:IsEnabled() then
-        addon:Print("You have to /reload for this option to take effect.", addon:ColoredString("Tooltip", "fcba03"))    
+        addon:Print("You have to /reload for this option to take effect.", addon:ColoredString("Tooltip", "fcba03"))
     end
 end
 

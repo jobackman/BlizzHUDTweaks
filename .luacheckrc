@@ -167,8 +167,11 @@ globals = {
   "DamageMeterSessionWindow1",
   "DamageMeterSessionWindow2",
   "DamageMeterSessionWindow3",
+  "GameTooltip_SetDefaultAnchor",
+  "hooksecurefunc",
+  "C_SpellBook"
 }
-max_line_length = 200
+max_line_length = 250
 max_code_line_length = 200
 max_string_line_length = 200
 max_comment_line_length = 200

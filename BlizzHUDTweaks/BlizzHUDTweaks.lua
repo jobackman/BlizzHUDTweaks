@@ -697,9 +697,8 @@ function addon:ExportProfile()
   }
   
   local serialized = AceSerializer:Serialize(profileData)
-  local encoded = addon:Encode(serialized)
   
-  return encoded
+  return serialized
 end
 
 function addon:ImportProfile(importString, profileName)
@@ -708,13 +707,7 @@ function addon:ImportProfile(importString, profileName)
     return false
   end
   
-  local decoded = addon:Decode(importString)
-  if not decoded then
-    addon:Print("Failed to decode import string. Please make sure you copied the entire string.")
-    return false
-  end
-  
-  local success, profileData = AceSerializer:Deserialize(decoded)
+  local success, profileData = AceSerializer:Deserialize(importString)
   if not success then
     addon:Print("Failed to deserialize profile data. The import string may be corrupted.")
     return false
@@ -751,82 +744,4 @@ function addon:ImportProfile(importString, profileName)
   addon:LoadProfile()
   
   return true
-end
-
--- Base64-like encoding for safe string transmission
-function addon:Encode(str)
-  local b64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-  local encoded = ""
-  local padding = ""
-  
-  for i = 1, #str, 3 do
-    local b1, b2, b3 = str:byte(i, i + 2)
-    local n = b1 * 65536 + (b2 or 0) * 256 + (b3 or 0)
-    
-    local c1 = math.floor(n / 262144) % 64
-    local c2 = math.floor(n / 4096) % 64
-    local c3 = math.floor(n / 64) % 64
-    local c4 = n % 64
-    
-    encoded = encoded .. b64chars:sub(c1 + 1, c1 + 1) .. b64chars:sub(c2 + 1, c2 + 1)
-    
-    if b2 then
-      encoded = encoded .. b64chars:sub(c3 + 1, c3 + 1)
-    else
-      padding = padding .. "="
-    end
-    
-    if b3 then
-      encoded = encoded .. b64chars:sub(c4 + 1, c4 + 1)
-    else
-      padding = padding .. "="
-    end
-  end
-  
-  return encoded .. padding
-end
-
-function addon:Decode(str)
-  local b64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-  local decoded = ""
-  
-  -- Remove any whitespace
-  str = str:gsub("%s", "")
-  
-  -- Remove padding
-  str = str:gsub("=", "")
-  
-  for i = 1, #str, 4 do
-    local c1, c2, c3, c4 = str:sub(i, i), str:sub(i + 1, i + 1), str:sub(i + 2, i + 2), str:sub(i + 3, i + 3)
-    
-    local n1 = b64chars:find(c1, 1, true)
-    local n2 = b64chars:find(c2, 1, true)
-    local n3 = c3 ~= "" and b64chars:find(c3, 1, true) or nil
-    local n4 = c4 ~= "" and b64chars:find(c4, 1, true) or nil
-    
-    if not n1 or not n2 then
-      return nil
-    end
-    
-    n1, n2 = n1 - 1, n2 - 1
-    n3 = n3 and (n3 - 1) or 0
-    n4 = n4 and (n4 - 1) or 0
-    
-    local n = n1 * 262144 + n2 * 4096 + n3 * 64 + n4
-    
-    local b1 = math.floor(n / 65536)
-    decoded = decoded .. string.char(b1)
-    
-    if c3 ~= "" then
-      local b2 = math.floor(n / 256) % 256
-      decoded = decoded .. string.char(b2)
-    end
-    
-    if c4 ~= "" then
-      local b3 = n % 256
-      decoded = decoded .. string.char(b3)
-    end
-  end
-  
-  return decoded
 end

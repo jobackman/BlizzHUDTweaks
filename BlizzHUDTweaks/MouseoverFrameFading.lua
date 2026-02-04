@@ -355,9 +355,9 @@ function MouseoverFrameFading:MouseoverFadingEnabled(frameOptions)
   if frameOptions.UseGlobalOptions then
     local profile = addon:GetProfileDB()
     local globalOptions = profile["*Global*"]
-    return globalOptions.MouseOverFadingEnabled
+    return globalOptions.MouseOverFadeEnabled
   else
-    return frameOptions.MouseOverFadingEnabled
+    return frameOptions.MouseOverFadeEnabled
   end
 end
 

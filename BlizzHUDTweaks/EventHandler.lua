@@ -4,6 +4,7 @@ local addon = LibStub("AceAddon-3.0"):GetAddon("BlizzHUDTweaks")
 local EventHandler = addon:GetModule("EventHandler")
 local MouseoverFrameFading = addon:GetModule("MouseoverFrameFading")
 local Miscellaneous = addon:GetModule("Miscellaneous")
+local Tooltip = addon:GetModule("Tooltip")
 
 local blizzHUDTweaksFrame = CreateFrame("Frame", "BlizzHUDTweaks", UIParent)
 
@@ -251,6 +252,10 @@ function EventHandler:PLAYER_LOGIN()
 
     if MouseoverFrameFading:IsEnabled() then
       MouseoverFrameFading:InstallHooks()
+    end
+
+    if Tooltip:IsEnabled() then
+      Tooltip:InstallHooks()
     end
   end
 end

@@ -2,6 +2,7 @@ local addon = LibStub("AceAddon-3.0"):GetAddon("BlizzHUDTweaks")
 local Options = addon:GetModule("Options")
 local MouseoverFrameFading = addon:GetModule("MouseoverFrameFading")
 local Miscellaneous = addon:GetModule("Miscellaneous")
+local Tooltip = addon:GetModule("Tooltip")
 local EventHandler = addon:GetModule("EventHandler")
 
 local eventsToRegister = {
@@ -94,6 +95,30 @@ local function getGlobalOptions()
               Miscellaneous:Disable()
             else
               Miscellaneous:Enable()
+            end
+          end
+        }
+      }
+    },
+    ["GlobalOptionsTooltip"] = {
+      name = "Tooltip",
+      order = 6,
+      type = "group",
+      guiInline = true,
+      args = {
+        ["GlobalOptionsTooltipEnabled"] = {
+          order = 0,
+          name = "Enabled",
+          desc = "Enable/Disable this sub module",
+          width = "double",
+          type = "toggle",
+          get = "GetValue",
+          set = function(info, value)
+            Options:SetValue(info, value)
+            if not value then
+              Tooltip:Disable()
+            else
+              Tooltip:Enable()
             end
           end
         }

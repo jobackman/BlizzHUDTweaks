@@ -8,6 +8,7 @@ local EventHandler = addon:NewModule("EventHandler", "AceEvent-3.0")
 local Options = addon:NewModule("Options")
 local MouseoverFrameFading = addon:NewModule("MouseoverFrameFading")
 local Miscellaneous = addon:NewModule("Miscellaneous")
+local Tooltip = addon:NewModule("Tooltip")
 local LibDBIcon = LibStub:GetLibrary("LibDBIcon-1.0", true)
 
 local function getBlizzHUDTweaksLibDbIconData(db)
@@ -514,10 +515,11 @@ function addon:InitializeOptions()
   addon:RefreshOptionTables()
   local optionsFrame, categoryId = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_options", "BlizzHUDTweaks")
   self.optionsFrame = optionsFrame
-
-  self.profileOptionsFrame = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_Profiles", "Profiles", "BlizzHUDTweaks")
-  self.mouseoverFrameFadingOptionsFrame = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_MouseoverFrameFading", "Actionbar/Frame Fading", "BlizzHUDTweaks")
+  
+  self.mouseoverFrameFadingOptionsFrame = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_MouseoverFrameFading", "Actionbar/Frame Fading", "BlizzHUDTweaks")  
   self.miscellaneousOptionsFrame = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_Miscellaneous", "Miscellaneous", "BlizzHUDTweaks")
+  self.tooltipOptionsFrame = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_Tooltip", "Tooltip", "BlizzHUDTweaks")
+  self.profileOptionsFrame = AceConfigDialog:AddToBlizOptions("BlizzHUDTweaks_Profiles", "Profiles", "BlizzHUDTweaks")
 
   BlizzHUDTweaks.optionsCategoryID = categoryId
 end
@@ -526,14 +528,17 @@ function addon:RefreshOptionTables()
   local globalOptions = Options:GetOptionsTable()
   AceConfig:RegisterOptionsTable("BlizzHUDTweaks_options", globalOptions)
 
-  local profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
-  AceConfig:RegisterOptionsTable("BlizzHUDTweaks_Profiles", profiles)
-
   local mouseoverFrameFadingOptions = MouseoverFrameFading:GetOptionsTable(self.db.profile)
   AceConfig:RegisterOptionsTable("BlizzHUDTweaks_MouseoverFrameFading", mouseoverFrameFadingOptions)
 
+  local profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+  AceConfig:RegisterOptionsTable("BlizzHUDTweaks_Profiles", profiles)
+
   local miscellaneousOptions = Miscellaneous:GetOptionsTable()
   AceConfig:RegisterOptionsTable("BlizzHUDTweaks_Miscellaneous", miscellaneousOptions)
+
+  local tooltipOptions = Tooltip:GetOptionsTable()
+  AceConfig:RegisterOptionsTable("BlizzHUDTweaks_Tooltip", tooltipOptions)
 end
 
 
